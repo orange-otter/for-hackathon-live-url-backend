@@ -19,21 +19,28 @@ load_dotenv()
 # Create FastAPI app instance
 app = FastAPI()
 
-# Enable CORS
+# --- START: RECOMMENDED CORS CONFIGURATION ---
+
+# Define the list of domains that are allowed to make requests to your API
+allowed_origins = [
+    "https://sof-event-extractor-hackathon.netlify.app",
+    "http://localhost:3000", # Optional: for local development
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins, # Use the specific list of origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"], # Allows all headers
 )
+# --- END: RECOMMENDED CORS CONFIGURATION ---
 
-# --- MODIFIED: Root endpoint ---
+
 @app.get("/")
 async def root():
     """Returns a simple message indicating the server is running."""
     return {"message": "Server is running"}
-# --- END of modification ---
 
 
 def clear_output_file(file_path: str = "output.json"):
